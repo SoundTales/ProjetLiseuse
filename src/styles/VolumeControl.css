@@ -1,0 +1,143 @@
+.volume-control-container {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: #424240; /* Toujours en mode nuit */
+  color: #FDFFE6; /* Toujours texte clair */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 201;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+.volume-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.volume-control-header h3 {
+  margin: 0;
+  color: #FDFFE6;
+}
+
+.volume-sliders {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.volume-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Styles pour les icônes audio */
+.sound-icon {
+  margin-bottom: 5px;
+  color: #F5FF85; /* Couleur d'accentuation */
+}
+
+.volume-slider label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #FDFFE6;
+  margin-bottom: 8px;
+}
+
+.volume-slider label span {
+  margin-top: 5px;
+}
+
+.vertical-slider {
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  width: 8px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.1);
+  outline: none;
+  margin: 10px 0;
+}
+
+.vertical-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #F5FF85;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.volume-percentage {
+  font-size: 0.9rem;
+  color: #FDFFE6;
+}
+
+.volume-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.volume-button {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #FDFFE6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mute-button:hover {
+  background-color: #ff5555;
+  color: white;
+  border-color: #ff5555;
+}
+
+.reset-button:hover {
+  background-color: #F5FF85;
+  color: #424240;
+}
+
+/* Animation lors du changement de volume */
+.vertical-slider:active + .volume-percentage {
+  animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .volume-control-container {
+    right: 10px;
+    width: 180px;
+  }
+  
+  .vertical-slider {
+    height: 80px;
+  }
+}

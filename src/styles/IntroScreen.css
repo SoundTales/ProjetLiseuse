@@ -1,0 +1,132 @@
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #424240;
+  color: #FDFFE6;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 80%;
+}
+
+/* Logo container */
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+.sound-tales-logo {
+  max-width: 200px;
+  height: auto;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 133, 0.3));
+}
+
+/* Title container */
+.title-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.tale-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: #F5FF85;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.tale-subtitle {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #FDFFE6;
+}
+
+/* Start container */
+.start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-button {
+  background-color: #F5FF85;
+  color: #424240;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+}
+
+.start-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.start-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+/* Animation de fondu en entrée */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Animation de fondu en sortie - ajoutée à la div principale lorsque l'utilisateur quitte */
+.intro-container.exit {
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .intro-content {
+    max-width: 90%;
+  }
+  
+  .logo-container {
+    margin-bottom: 1.5rem;
+  }
+  
+  .sound-tales-logo {
+    max-width: 150px;
+  }
+  
+  .tale-title {
+    font-size: 2.2rem;
+  }
+  
+  .tale-subtitle {
+    font-size: 1rem;
+  }
+  
+  .start-button {
+    padding: 10px 24px;
+    font-size: 1rem;
+  }
+}

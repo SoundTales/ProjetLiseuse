@@ -1,0 +1,30 @@
+:root {
+  --primary-bg: #424240;
+  --primary-text: #FDFFE6;
+  --secondary-bg: #FDFFE6;
+  --secondary-text: #424240;
+  --accent-color: #F5FF85;
+  --page-color: #FAF9F6;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Literata', serif;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}

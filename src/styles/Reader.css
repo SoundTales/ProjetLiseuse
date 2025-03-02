@@ -1,0 +1,178 @@
+.reader-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: var(--reader-bg);
+  color: var(--reader-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-bottom: 60px; /* Space for navigation bar */
+  
+  /* Masquer la barre de défilement mais conserver la fonctionnalité */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Masquer la barre de défilement pour Chrome, Safari et Opera */
+.reader-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Chapter header styles */
+.chapter-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--reader-border);
+}
+
+.chapter-header h1 {
+  font-size: 1.8em;
+  margin-bottom: 0.5rem;
+  color: var(--reader-text);
+}
+
+.chapter-number {
+  font-size: 1em;
+  color: rgba(var(--reader-text), 0.8);
+  font-style: italic;
+}
+
+/* Chapter content styles - Suppression des marges */
+.chapter-content {
+  flex: 1;
+  text-align: justify;
+  hyphens: auto;
+  padding: 0 0 2rem 0; /* Suppression des marges latérales de 5% */
+  width: 100%;
+}
+
+/* Text segment styles */
+.text-segment {
+  margin-bottom: 1.5rem;
+}
+
+/* Dialogue segment styles */
+.dialogue-segment {
+  display: flex;
+  align-items: flex-start;
+  margin: 1.5rem 0;
+  padding: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.dialogue-segment:hover {
+  background-color: rgba(245, 255, 133, 0.1); /* Utilisation de la couleur d'accentuation */
+}
+
+.dialogue-marker {
+  width: 4px;
+  min-height: 100%;
+  background-color: var(--accent-color);
+  margin-right: 12px;
+  border-radius: 2px;
+}
+
+.dialogue-content {
+  flex: 1;
+}
+
+.speaker {
+  font-weight: bold;
+  color: var(--reader-text);
+}
+
+/* Bookmark indicator */
+.bookmark-indicator {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  z-index: 10;
+}
+
+.bookmark-button {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bookmark-button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.bookmark-button.active {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  opacity: 1;
+}
+
+.bookmark-icon {
+  margin-right: 8px;
+}
+
+.bookmark-text {
+  display: none; /* Caché par défaut */
+}
+
+/* Afficher le texte au survol */
+.bookmark-button:hover .bookmark-text {
+  display: inline;
+}
+
+/* Text size variations */
+.reader-container.small {
+  font-size: var(--font-size-small);
+}
+
+.reader-container.medium {
+  font-size: var(--font-size-medium);
+}
+
+.reader-container.large {
+  font-size: var(--font-size-large);
+}
+
+/* Mode nuit modifié */
+.night .reader-container {
+  background-color: #424240;
+  color: var(--primary-text);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .reader-container {
+    padding: 10px;
+  }
+  
+  .bookmark-indicator {
+    bottom: 70px;
+    right: 10px;
+  }
+  
+  .bookmark-button {
+    padding: 8px;
+  }
+  
+  .bookmark-text {
+    display: none; /* Toujours caché sur mobile */
+  }
+  
+  /* Ne pas afficher le texte même au survol sur mobile */
+  .bookmark-button:hover .bookmark-text {
+    display: none;
+  }
+}

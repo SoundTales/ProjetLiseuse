@@ -1,0 +1,134 @@
+.navigation-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #424240; /* Toujours en mode nuit */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Bordure mode nuit */
+  z-index: 100;
+}
+
+.nav-button {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #FDFFE6; /* Toujours texte clair */
+  border: 1px solid #F5FF85; /* Bordure accent */
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-button:hover {
+  background-color: #F5FF85;
+  color: #424240;
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-panel {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  width: 300px;
+  background-color: #424240; /* Toujours en mode nuit */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 101;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: #FDFFE6; /* Toujours texte clair */
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.settings-header h3 {
+  margin: 0;
+  color: #FDFFE6;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #FDFFE6;
+  cursor: pointer;
+}
+
+.settings-group {
+  margin-bottom: 16px;
+}
+
+.settings-group h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #FDFFE6;
+}
+
+.text-size-controls, 
+.mode-button,
+.volume-button,
+.bookmarks-button {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.size-button, 
+.mode-button,
+.volume-button,
+.bookmarks-button {
+  padding: 8px 16px;
+  background-color: #424240;
+  color: #FDFFE6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-button.active, 
+.size-button:hover,
+.mode-button:hover,
+.volume-button:hover,
+.bookmarks-button:hover {
+  background-color: #F5FF85;
+  color: #424240;
+}
+
+.mode-button, 
+.volume-button,
+.bookmarks-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navigation-bar {
+    padding: 8px 10px;
+  }
+  
+  .nav-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .settings-panel {
+    width: 280px;
+    right: 10px;
+  }
+}
