@@ -7,7 +7,8 @@
   background-color: var(--reader-bg);
   color: var(--reader-text);
   transition: background-color 0.3s ease, color 0.3s ease;
-  margin-bottom: 60px; /* Space for navigation bar */
+  margin-bottom: 80px; /* Augmenté de 60px à 80px pour éviter l'empiètement */
+  padding-bottom: 20px; /* Ajout d'un padding supplémentaire en bas */
   
   /* Masquer la barre de défilement mais conserver la fonctionnalité */
   scrollbar-width: none; /* Firefox */
@@ -89,7 +90,7 @@
 /* Bookmark indicator */
 .bookmark-indicator {
   position: fixed;
-  bottom: 60px;
+  bottom: 70px; /* Augmenté pour éviter le chevauchement avec la barre de navigation */
   right: 20px;
   z-index: 10;
 }
@@ -156,10 +157,12 @@
 @media (max-width: 768px) {
   .reader-container {
     padding: 10px;
+    margin-bottom: 90px; /* Augmenté pour les petits écrans */
+    padding-bottom: 25px; /* Padding supplémentaire pour les petits écrans */
   }
   
   .bookmark-indicator {
-    bottom: 70px;
+    bottom: 80px; /* Augmenté pour éviter le chevauchement sur mobile */
     right: 10px;
   }
   

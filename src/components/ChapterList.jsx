@@ -1,17 +1,22 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { chapterData } from '../data/chapterData';
+import FanStore from './FanStore';
+import Credits from './Credits';
 import '../styles/ChapterList.css';
+import '../styles/FanStore.css';
+import '../styles/Credits.css';
 
 const ChapterList = ({ 
   onSelectChapter, 
   onResumeReading,
   currentChapter, 
-  readingProgress,
-  bookmarks,
-  onClose
+  readingProgress = {},
+  bookmarks = [],
+  onClose,
+  nightMode = false
 }) => {
   const [activeTab, setActiveTab] = useState('chapters');
-  const [showHorizontalNav, setShowHorizontalNav] = useState(false);
   
   // Format reading progress into percentage
   const formatProgress = (progress) => {
@@ -70,8 +75,57 @@ const ChapterList = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
   
+  // Ajout de la navigation tactile (swipe)
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const MIN_SWIPE_DISTANCE = 50;
+    
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+    };
+    
+    const handleTouchEnd = (e) => {
+      touchEndX = e.changedTouches[0].clientX;
+      handleSwipe();
+    };
+    
+    const handleSwipe = () => {
+      const swipeDistance = touchEndX - touchStartX;
+      
+      if (Math.abs(swipeDistance) < MIN_SWIPE_DISTANCE) return;
+      
+      if (swipeDistance > 0) {
+        // Swipe vers la droite
+        setActiveTab(prev => {
+          if (prev === 'chapters') return 'fanstore';
+          if (prev === 'credits') return 'chapters';
+          return prev;
+        });
+      } else {
+        // Swipe vers la gauche
+        setActiveTab(prev => {
+          if (prev === 'chapters') return 'credits';
+          if (prev === 'fanstore') return 'chapters';
+          return prev;
+        });
+      }
+    };
+    
+    const contentElement = document.querySelector('.chapter-list-content');
+    if (contentElement) {
+      contentElement.addEventListener('touchstart', handleTouchStart);
+      contentElement.addEventListener('touchend', handleTouchEnd);
+      
+      return () => {
+        contentElement.removeEventListener('touchstart', handleTouchStart);
+        contentElement.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, []);
+  
   return (
-    <div className="chapter-list-container">
+    <div className={`chapter-list-container ${nightMode ? 'night-mode' : ''}`}>
       <div className="chapter-list-header">
         <h1 className="osrase-title">OSRASE</h1>
         <div className="tab-buttons">
@@ -173,7 +227,8 @@ const ChapterList = ({
               {chapterData.map(chapter => (
                 <li 
                   key={chapter.id}
-                  className={`chapter-item ${chapter.id === currentChapter ? 'current' : ''}`}
+                  className={`
+                    chapter-item ${chapter.id === currentChapter ? 'current' : ''}`}
                   onClick={() => onSelectChapter(chapter.id)}
                 >
                   <div className="chapter-item-content">
@@ -211,95 +266,10 @@ const ChapterList = ({
         )}
         
         {/* ONGLET FAN STORE */}
-        {activeTab === 'fanstore' && (
-          <div className="fanstore">
-            <h2>Fan Store Osrase</h2>
-            <p className="store-description">
-              Découvrez nos produits exclusifs liés à l'univers d'Osrase
-            </p>
-            
-            <div className="store-items">
-              <div className="store-item">
-                <img src="https://static.wixstatic.com/media/b9ad46_8add9043f7aa4f9fab249ccd3afe64f8~mv2.png" alt="Livre collector" />
-                <h3>Livre Collector</h3>
-                <p>Édition limitée avec illustrations exclusives et signature de l'auteur</p>
-                <div className="item-price">29,99€</div>
-                <button className="store-button" onClick={() => window.open('https://soundtales.com/store/livre-collector', '_blank')}>
-                  Voir le produit
-                </button>
-              </div>
-              
-              <div className="store-item">
-                <img src="https://static.wixstatic.com/media/b9ad46_8add9043f7aa4f9fab249ccd3afe64f8~mv2.png" alt="Bande originale" />
-                <h3>Bande Originale</h3>
-                <p>L'intégrale des thèmes musicaux du Tale en CD ou vinyle</p>
-                <div className="item-price">14,99€</div>
-                <button className="store-button" onClick={() => window.open('https://soundtales.com/store/bande-originale', '_blank')}>
-                  Voir le produit
-                </button>
-              </div>
-              
-              <div className="store-item">
-                <img src="https://static.wixstatic.com/media/b9ad46_8add9043f7aa4f9fab249ccd3afe64f8~mv2.png" alt="Pack Collector" />
-                <h3>Pack Collector Complet</h3>
-                <p>Le livre, la bande originale et un pendentif Osrase authentique</p>
-                <div className="item-price">49,99€</div>
-                <button className="store-button" onClick={() => window.open('https://soundtales.com/store/pack-collector', '_blank')}>
-                  Voir le produit
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 'fanstore' && <FanStore />}
         
         {/* ONGLET CREDITS */}
-        {activeTab === 'credits' && (
-          <div className="credits">
-            <h2>Crédits et Présentation</h2>
-            
-            <div className="credits-section">
-              <h3>L'équipe artistique</h3>
-              <div className="team-members">
-                <div className="team-member">
-                  <img src="https://static.wixstatic.com/media/b9ad46_8add9043f7aa4f9fab249ccd3afe64f8~mv2.png" alt="Johnny Delaveau" />
-                  <h4>Johnny Delaveau</h4>
-                  <p>Auteur</p>
-                </div>
-                
-                <div className="team-member">
-                  <img src="https://static.wixstatic.com/media/b9ad46_8add9043f7aa4f9fab249ccd3afe64f8~mv2.png" alt="Quentin Querel" />
-                  <h4>Quentin Querel</h4>
-                  <p>Compositeur</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="tale-description">
-              <h3>À propos d'Osrase</h3>
-              <p>
-                Alors que de profondes inégalités rongent le monde des Osrases, Malone et Zadig, deux habitants d'un secteur défavorisé, sont confrontés à la mort de leur ami Aimé, avec qui ils formaient un trio inséparable. Malone, calculateur, rêve de transformer le monde de l'intérieur grâce à une ascension sociale fulgurante, tandis que Zadig, plus populiste prend la tête d'un mouvement révolutionnaire.
-              </p>
-              <p>
-                L'un agira dans l'ombre, l'autre dans la lumière. Leur amitié résistera-t-elle à ces choix opposés ? Malone deviendra-t-il un traître ? Et laquelle de leurs visions triomphera ?
-              </p>
-              <p>
-                L'histoire tragique d'une amitié entre deux leaders unis par une loyauté indéfectible.
-              </p>
-            </div>
-            
-            <div className="tale-features">
-              <h3>Caractéristiques techniques</h3>
-              <ul>
-                <li><strong>Format :</strong> Tale One-Shot</li>
-                <li><strong>Durée de lecture :</strong> 2h30 environ</li>
-                <li><strong>Nombre de chapitres :</strong> 20</li>
-                <li><strong>Thèmes musicaux :</strong> 12 compositions originales</li>
-                <li><strong>Voix :</strong> 8 comédiens professionnels</li>
-                <li><strong>Sound design :</strong> Créé spécifiquement pour cette expérience</li>
-              </ul>
-            </div>
-          </div>
-        )}
+        {activeTab === 'credits' && <Credits />}
       </div>
       
       {/* Guides de navigation horizontale */}

@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
+  base: '/ProjetLiseuse/',  // 🔥 Indispensable pour GitHub Pages
   plugins: [react()],
   resolve: {
     alias: {
@@ -15,6 +16,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',  // 🔥 Important pour regrouper les fichiers CSS & JS
     sourcemap: true,
     minify: 'terser',
   },

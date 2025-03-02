@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import IntroScreen from './components/IntroScreen';
 import ChapterList from './components/ChapterList';
@@ -23,6 +23,7 @@ function App() {
   const [bookmarks, setBookmarks] = useState([]);
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [chapterListOpen, setChapterListOpen] = useState(false);
+  const [previousRoute, setPreviousRoute] = useState(null); // Pour se souvenir de la route précédente
   
   // États pour la gestion des sons hébergés
   const [audioLoaded, setAudioLoaded] = useState(false);
@@ -35,6 +36,15 @@ function App() {
   const currentDialogueRef = useRef(null); // Référence au dialogue en cours de lecture
   
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Mémoriser la route actuelle lorsqu'elle change
+  useEffect(() => {
+    // Ne pas sauvegarder la route /chapters comme route précédente
+    if (location.pathname !== '/chapters') {
+      setPreviousRoute(location.pathname);
+    }
+  }, [location.pathname]);
 
   // Préchargement des thèmes musicaux
   useEffect(() => {
@@ -67,7 +77,12 @@ function App() {
     if (savedBookmarks) {
       setBookmarks(JSON.parse(savedBookmarks));
     }
-  }, []);
+
+    // Vérifier si nous sommes sur l'écran d'intro ou non
+    if (location.pathname !== '/' && location.pathname !== '') {
+      setShowIntro(false);
+    }
+  }, [location.pathname]);
 
   // Save settings to localStorage when they change
   useEffect(() => {
@@ -100,9 +115,11 @@ function App() {
     localStorage.setItem('soundTalesBookmarks', JSON.stringify(bookmarks));
   }, [bookmarks]);
 
-  // Start theme music when chapter loads - Modifié pour éviter de relancer le thème
+  // MODIFIÉ: Start theme music only when reading a chapter
   useEffect(() => {
-    if (!showIntro && audioPlaying) {
+    const isReadingChapter = location.pathname.includes('/read/');
+    
+    if (!showIntro && isReadingChapter && audioPlaying) {
       const musicUrl = themeMusic[currentChapter];
       
       if (!musicUrl) {
@@ -124,6 +141,9 @@ function App() {
           setCurrentThemeUrl(musicUrl);
         }
       }
+    } else if (!isReadingChapter && themeMusicRef.current) {
+      // Pause la musique si on n'est pas sur un chapitre
+      themeMusicRef.current.pause();
     }
     
     return () => {
@@ -131,7 +151,7 @@ function App() {
         themeMusicRef.current.pause();
       }
     };
-  }, [showIntro, audioPlaying, currentChapter, currentThemeUrl]);
+  }, [showIntro, audioPlaying, currentChapter, currentThemeUrl, location.pathname]);
 
   // Mise à jour du volume sans relancer le thème
   useEffect(() => {
@@ -283,6 +303,24 @@ function App() {
     }
   };
 
+  // MODIFIÉ: Gestionnaire de fermeture du chapitrage
+  const handleCloseChapterList = () => {
+    // Si on a une route précédente valide, y retourner
+    if (previousRoute && previousRoute.includes('/read/')) {
+      navigate(previousRoute);
+    } 
+    // Si on vient de l'intro et qu'on n'a pas de progression, aller au chapitre 1
+    else if (showIntro || !readingProgress.lastChapter) {
+      navigate('/read/1');
+      setCurrentChapter(1);
+    } 
+    // Sinon, reprendre à la dernière position de lecture
+    else {
+      navigate(`/read/${readingProgress.lastChapter}`);
+      setCurrentChapter(readingProgress.lastChapter);
+    }
+  };
+
   const returnToStore = () => {
     // Dans l'implémentation réelle, cela naviguerait vers le site Wix
     window.location.href = 'https://soundtales.com';
@@ -333,7 +371,7 @@ function App() {
               currentChapter={currentChapter}
               readingProgress={readingProgress}
               bookmarks={bookmarks}
-              onClose={() => navigate('/')}
+              onClose={handleCloseChapterList}
               nightMode={nightMode}
             />
           } 
@@ -361,7 +399,8 @@ function App() {
         />
       </Routes>
       
-      {!showIntro && !window.location.pathname.includes('/chapters') && (
+      {/* MODIFIÉ: Afficher la navigation si on n'est pas sur l'intro et pas sur la page de chapitrage */}
+      {(!showIntro && !location.pathname.includes('/chapters')) && (
         <Navigation 
           currentChapter={currentChapter}
           onPreviousChapter={() => navigateToChapter(Math.max(1, currentChapter - 1))}

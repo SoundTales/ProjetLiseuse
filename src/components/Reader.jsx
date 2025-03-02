@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Ajout de useNavigate
 import { chapterData } from '../data/chapterData';
 import '../styles/Reader.css';
 
 const Reader = ({ 
-  chapterId, 
   textSize, 
   nightMode, 
   onDialogueClick, 
@@ -11,14 +11,25 @@ const Reader = ({
   bookmarks,
   updateProgress 
 }) => {
+  const { chapterId } = useParams(); // Récupérer l'ID du chapitre depuis l'URL
   const [chapter, setChapter] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const contentRef = useRef(null);
+  const navigate = useNavigate();
   
   // Load chapter data when chapterId changes
   useEffect(() => {
-    setChapter(chapterData.find(c => c.id === parseInt(chapterId)));
-  }, [chapterId]);
+    const numericChapterId = parseInt(chapterId);
+    const foundChapter = chapterData.find(c => c.id === numericChapterId);
+    
+    if (foundChapter) {
+      setChapter(foundChapter);
+    } else {
+      // Si le chapitre n'existe pas, rediriger vers le chapitre 1
+      console.warn(`Chapitre ${chapterId} non trouvé, redirection vers le chapitre 1`);
+      navigate('/read/1');
+    }
+  }, [chapterId, navigate]);
 
   // Track reading progress
   useEffect(() => {
@@ -29,7 +40,7 @@ const Reader = ({
       const position = scrollTop / (scrollHeight - clientHeight);
       setScrollPosition(position);
       
-      // Update reading progress every 2 seconds
+      // Update reading progress
       if (typeof updateProgress === 'function') {
         updateProgress(position);
       }
@@ -41,7 +52,7 @@ const Reader = ({
   }, [updateProgress]);
 
   if (!chapter) {
-    return <div className="loading">Loading chapter...</div>;
+    return <div className="loading">Chargement du chapitre...</div>;
   }
 
   // Process chapter content to identify dialogue segments

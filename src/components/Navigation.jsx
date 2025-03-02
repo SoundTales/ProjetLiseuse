@@ -33,7 +33,7 @@ const Navigation = ({
         
         <button 
           className="nav-button home-button"
-          onClick={onReturnToStore}
+          onClick={() => window.location.href = 'https://audiotalecontact.wixsite.com/audiotale/sound-tales'}
         >
           Catalogue
         </button>
