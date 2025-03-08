@@ -44,6 +44,12 @@ function App() {
     if (location.pathname !== '/chapters') {
       setPreviousRoute(location.pathname);
     }
+    
+    // MODIFICATION: Mettre à jour showIntro en fonction de la route actuelle
+    // Si nous ne sommes pas à la racine, l'intro ne doit pas être visible
+    if (location.pathname !== '/' && location.pathname !== '') {
+      setShowIntro(false);
+    }
   }, [location.pathname]);
 
   // Préchargement des thèmes musicaux
@@ -77,12 +83,7 @@ function App() {
     if (savedBookmarks) {
       setBookmarks(JSON.parse(savedBookmarks));
     }
-
-    // Vérifier si nous sommes sur l'écran d'intro ou non
-    if (location.pathname !== '/' && location.pathname !== '') {
-      setShowIntro(false);
-    }
-  }, [location.pathname]);
+  }, []);
 
   // Save settings to localStorage when they change
   useEffect(() => {
@@ -354,11 +355,20 @@ function App() {
         <Route 
           path="/" 
           element={
-            <IntroScreen 
-              onStart={startReading} 
-              showIntro={showIntro}
-              exitIntro={exitIntro}
-            />
+            // MODIFICATION: Ne rendre l'IntroScreen que si showIntro est true
+            showIntro ? (
+              <IntroScreen 
+                onStart={startReading} 
+                showIntro={showIntro}
+                exitIntro={exitIntro}
+              />
+            ) : (
+              // Rediriger vers la page chapitres si l'intro n'est pas affichée mais qu'on est sur "/"
+              <div style={{ display: 'none' }}>
+                {/* Cette div est invisible et sert juste à triggerr une redirection */}
+                {navigate('/chapters')}
+              </div>
+            )
           } 
         />
         

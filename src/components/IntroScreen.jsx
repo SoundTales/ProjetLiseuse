@@ -15,6 +15,11 @@ const IntroScreen = ({ onStart, showIntro, exitIntro }) => {
     }
   }, [showIntro]);
   
+  // MODIFICATION: Si showIntro est false, ne rien afficher
+  if (!showIntro) {
+    return null;
+  }
+  
   return (
     <div className={`intro-container ${exitIntro ? 'exit' : ''}`}>
       <div className="intro-content">
